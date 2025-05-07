@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
+#include <stdlib.h>
 
 #define R(mul,shift,x,y) \
   _=x; \
@@ -13,7 +15,15 @@
 
 int8_t b[1760], z[1760];
 
+void restore_cursor(int sig) {
+  printf("\x1b[?25h");
+  exit(0);
+}
+
 void main() {
+  signal(SIGINT, restore_cursor);
+  signal(SIGTERM, restore_cursor);
+  printf("\x1b[?25l");
   int sA=1024,cA=0,sB=1024,cB=0,_;
   for (;;) {
     memset(b, 32, 1760);  // text buffer
@@ -47,7 +57,11 @@ void main() {
       R(9, 7, cj, sj)  // rotate j
     }
     for (int k = 0; 1761 > k; k++)
-      putchar(k % 80 ? b[k] : 10);
+    if (k % 80) {
+      printf("\x1b[38;5;130m%c\x1b[0m", b[k]);  // Brown color using 256-color ANSI
+    } else {
+        putchar(10);  // Newline
+    }
     R(5, 7, cA, sA);
     R(5, 8, cB, sB);
     usleep(15000);
