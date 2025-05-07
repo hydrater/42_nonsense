@@ -104,16 +104,6 @@ CUSTOMER_OPT_OUT_FLAG="SKIP"
 
 # Initialises state according to launch parameters
 initialise() {
-	if [ "$USER" = "rsiah" ]; then
-		if ! [ "$1" = "force" ]; then
-			printf "oops\n"
-			exit 0
-		else
-			printf "Overriding! May affect configs!\n"
-			shift
-		fi
-	fi
-
 	for arg in "$@"
 	do
 		# trigger cleanup instead of running the script
