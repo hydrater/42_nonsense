@@ -1,14 +1,16 @@
 #!/bin/bash
 
-# Create a temp directory and move into it
-tmpdir=$(mktemp -d)
-cd "$tmpdir" || exit 1
+# Temporary location for the binary
+TMP_DONUT=$(mktemp /tmp/donut.XXXXXX)
 
-# Download the C file
-curl -sSL https://raw.githubusercontent.com/hydrater/42_nonsense/main/donut.c -o donut.c
+# Download the binary
+curl -sL https://raw.githubusercontent.com/hydrater/42_nonsense/main/donut -o "$TMP_DONUT"
 
-# Compile it
-gcc -o donut donut.c -lm
+# Make it executable
+chmod +x "$TMP_DONUT"
 
-# Run the donut
-./donut
+# Run it
+"$TMP_DONUT"
+
+# Optional: delete the binary afterward
+rm "$TMP_DONUT"
