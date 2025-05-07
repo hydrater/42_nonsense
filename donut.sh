@@ -1,10 +1,14 @@
 #!/bin/bash
 
-# Download the raw C file using curl
-curl -s -o donut.c https://raw.githubusercontent.com/hydrater/42_nonsense/main/donut.c
+# Create a temp directory and move into it
+tmpdir=$(mktemp -d)
+cd "$tmpdir" || exit 1
 
-# Compile the C file with gcc
+# Download the C file
+curl -sSL https://raw.githubusercontent.com/hydrater/42_nonsense/main/donut.c -o donut.c
+
+# Compile it
 gcc -o donut donut.c -lm
 
-# Run the compiled binary
+# Run the donut
 ./donut
